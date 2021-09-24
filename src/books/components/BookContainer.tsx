@@ -1,7 +1,6 @@
-import React, { FC, useState, useEffect, useCallback } from "react";
+import React, { FC, useState, useEffect } from "react";
 import { Book } from "../Book";
 import { BooksService } from "../services/BooksService";
-import { useRouter } from "next/router";
 import { BookOverview } from "./BookOverview";
 
 export interface Props {
@@ -13,8 +12,6 @@ interface State {
 }
 
 export const BookOverviewContainer: FC<Props> = ({ bookService }) => {
-  const router = useRouter();
-
   const [state, setState] = useState<State>({
     books: [],
   });
@@ -23,12 +20,5 @@ export const BookOverviewContainer: FC<Props> = ({ bookService }) => {
     bookService.findAll().then((books) => setState({ books }));
   }, [bookService, setState]);
 
-  const selectBook = useCallback(
-    (book: Book) => {
-      router.push(`/book/${book.id}`);
-    },
-    [router]
-  );
-
-  return <BookOverview books={state.books} selectBook={selectBook} />;
+  return <BookOverview books={state.books} />;
 };
