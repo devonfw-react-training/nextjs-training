@@ -68,3 +68,7 @@ export class LocalBooksService implements BooksService {
     return this.sequencer++;
   }
 }
+
+const localBookService = new LocalBooksService();
+
+export default localBookService;

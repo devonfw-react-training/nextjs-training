@@ -1,10 +1,8 @@
 import { Book } from "./../../../src/books/Book";
-import { LocalBooksService } from "./../../../src/books/services/LocalBookService";
+import localBookService from "./../../../src/books/services/LocalBookService";
 import type { NextApiRequest, NextApiResponse } from "next";
 import Cors from "cors";
 import initMiddleware from "../../../lib/initMiddleware";
-
-const bookService = new LocalBooksService();
 
 // Initialize the cors middleware
 const cors = initMiddleware(
@@ -28,13 +26,13 @@ export default async function handler(
 
   switch (method) {
     case "GET":
-      return bookService
+      return localBookService
         .findOne(Number.parseInt(id as string))
         .then((book) => res.status(200).json(book))
         .catch((e) => res.status(500).end());
     case "POST":
     case "PUT":
-      return bookService
+      return localBookService
         .save(JSON.parse(req.body))
         .then((book) => res.status(200).json(book))
         .catch((e) => res.status(500).end());

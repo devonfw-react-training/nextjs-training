@@ -1,10 +1,8 @@
 import { Book } from "./../../src/books/Book";
-import { LocalBooksService } from "./../../src/books/services/LocalBookService";
+import localBookService from "./../../src/books/services/LocalBookService";
 import type { NextApiRequest, NextApiResponse } from "next";
 import Cors from "cors";
 import initMiddleware from "../../lib/initMiddleware";
-
-const bookService = new LocalBooksService();
 
 // Initialize the cors middleware
 const cors = initMiddleware(
@@ -21,7 +19,7 @@ export default async function handler(
 ) {
   await cors(req, res);
 
-  return bookService
+  return localBookService
     .findAll()
     .then((books) => res.status(200).json(books))
     .catch((e) => res.status(500).end());
