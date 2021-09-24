@@ -1,23 +1,34 @@
-import { LocalBooksService } from "./../../src/books/services/LocalBookService";
 import { BookDetails } from "../../src/books/components/BookDetails";
 
 import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
+import { FC } from "react";
 import { Book } from "../../src/books/Book";
 import { RemoteBooksService } from "../../src/books/services/RemoteBookService";
+import { GetServerSideProps } from "next";
 
 const booksService = new RemoteBooksService();
 
-export default function BookPage() {
+interface Props {
+  book: Book;
+}
+
+const BookPage: FC<Props> = ({ book }) => {
   const router = useRouter();
-  const { id } = router.query;
-  const [book, setBook] = useState<Book>();
-
-  useEffect(() => {
-    booksService.findOne(Number.parseInt(id as string)).then((b) => setBook(b));
-  }, [id]);
-
   return book ? (
     <BookDetails book={book} onBookChange={async () => router.back()} />
   ) : null;
-}
+};
+
+export default BookPage;
+
+const getServerSideProps: GetServerSideProps = async function (context) {
+  const { id } = context.query;
+
+  const book = await booksService.findOne(Number.parseInt(id as string));
+
+  return {
+    props: { book }, // will be passed to the page component as props
+  };
+};
+
+export { getServerSideProps };
