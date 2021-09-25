@@ -1,8 +1,22 @@
-import { LocalBooksService } from "./../../src/books/services/LocalBookService";
 import { BookOverviewContainer } from "./../../src/books/components/BookContainer";
-import { RemoteBooksService } from "../../src/books/services/RemoteBookService";
+import booksService from "../../src/books/services/RemoteBookService";
+import { Book } from "../../src/books/Book";
+import { FC } from "react";
+import { GetStaticProps } from "next";
 
-export default function BooksPage() {
-  const booksService = new RemoteBooksService();
-  return <BookOverviewContainer bookService={booksService} />;
+interface Props {
+  books: Book[];
 }
+
+const BooksPage: FC<Props> = ({ books }) => {
+  return <BookOverviewContainer books={books} />;
+};
+
+export default BooksPage;
+
+export const getStaticProps: GetStaticProps = async function () {
+  const books = await booksService.findAll();
+  return {
+    props: { books },
+  };
+};

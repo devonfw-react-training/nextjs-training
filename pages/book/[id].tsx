@@ -3,10 +3,8 @@ import { BookDetails } from "../../src/books/components/BookDetails";
 import { useRouter } from "next/router";
 import { FC } from "react";
 import { Book } from "../../src/books/Book";
-import { RemoteBooksService } from "../../src/books/services/RemoteBookService";
+import booksService from "../../src/books/services/RemoteBookService";
 import { GetServerSideProps } from "next";
-
-const booksService = new RemoteBooksService();
 
 interface Props {
   book: Book;
@@ -21,14 +19,10 @@ const BookPage: FC<Props> = ({ book }) => {
 
 export default BookPage;
 
-const getServerSideProps: GetServerSideProps = async function (context) {
+export const getServerSideProps: GetServerSideProps = async (context) => {
   const { id } = context.query;
-
   const book = await booksService.findOne(Number.parseInt(id as string));
-
   return {
-    props: { book }, // will be passed to the page component as props
+    props: { book },
   };
 };
-
-export { getServerSideProps };

@@ -29,3 +29,5 @@ export class RemoteBooksService implements BooksService {
     }).then((response) => response.json());
   }
 }
+
+export default new RemoteBooksService();
