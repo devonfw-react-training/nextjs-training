@@ -18,5 +18,6 @@ export const getStaticProps: GetStaticProps = async function () {
   const books = await booksService.findAll();
   return {
     props: { books },
+    revalidate: 30,
   };
 };
